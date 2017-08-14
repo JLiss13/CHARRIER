@@ -1,10 +1,12 @@
 import pandas as pd
 import time
 import matplotlib.pyplot as plt
+import os
 #Objective of Code: Determine the straight passes of the flight trajectories. An output file with timestamps
 #of the start and end along with their associated data will be saved into the current directory.
 start_time = time.time()
-file="CABIN_10hz_13110505.TXT" # 1 or 10 Hz aircraft data csv file
+dir = "/Users/Jaliss/Documents/NASA/C-HARRIER/C-HARRIER_DATA/OCEANIA_Aircraft_Data_11_05_2013/"
+file=os.path.join(dir,"TO_Cabin_Data_11_5_2013/CABIN_10hz_13110505.TXT") # 1 or 10 Hz aircraft data csv file
 tempcsvarray = pd.read_csv(file)
 print("Size of the tempcsvarray: " + str(tempcsvarray.shape))
 options='1'

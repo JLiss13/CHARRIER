@@ -24,34 +24,58 @@ for folder in folderlist:
     # On each iteration the files will be a list of files in the root directory
         files = filter(lambda k: not 'Log' in k, files)
         files = filter(lambda k: not '_HOST_' in k, files)
-        files = filter(lambda k: not 'Aux' in k,files)
         files = filter(lambda k: '.csv' in k, files)
         files = filter(lambda k: not 'info' in k, files)
         files = filter(lambda k: not 'summary' in k, files)
         files = filter(lambda k: not folder in k,files)
-        # files = filter(lambda k: k[0:2] == prefix in k, files) # filters out only files with the prefix beginning
-        os.chdir(root)
+        files = filter(lambda k: not 'Modified' in k, files)
+    # files = filter(lambda k: k[0:2] == prefix in k, files) # filters out only files with the prefix beginning
         files = filter(lambda k: os.path.getsize(k) > 410, files) # Filter out all files larger than 410 bytes
+        os.chdir(root)
         files = list(files)
-        csvarray = pd.read_csv(os.path.join(root,files[0])) #Obtains preexisting excel file or makes a new one using the first one as an example. It also takes notes of UnixTimeStamp column.
+        filesmain = filter(lambda k: not 'Aux' in k, files)
+        filesmain = list(filesmain)
+        filesaux = filter(lambda k: 'Aux' in k, files)
+        filesaux = list(filesaux)
+        #Obtains preexisting excel file or makes a new one using the first one as an example. It also takes notes of UnixTimeStamp column.
+        csvarray = pd.read_csv(os.path.join(root, files[0]))
+        tempcsvarrayAux = pd.read_csv(os.path.join(root, filesaux[0]))
+        Milli = tempcsvarrayAux['Millisecond'].astype(str).str.zfill(3)
+        csvarray['DateTimeUTC'] = csvarray['DateTimeUTC'] + '.'
+        csvarray['DateTimeUTC'] = csvarray['DateTimeUTC'] + Milli
         # csvarray = pd.DataFrame(csvarray, columns=['DateTime', 'DateTimeUTC', 'Millisecond', 'Master_FrameNumber',
         #       'Master_Time','Master_Vin,Master_Iin','Master_Vchg','Master_Ichg','Master_Vbat','Master_Ibat','Master_Vp1'
         #       ,'Master_Ip1','Master_Vp2','Master_Ip2','Master_V33','Master_Temp','Es_FrameNumber','Es_Time','Es_Vin',
         #       'Es_Iin','Es_Temp','Es_Pressure','Li_FrameNumber','Li_Time','Li_Vin','Li_Iin','Li_Temp','Li_Pressure',
         #       'Lt_FrameNumber','Lt_Time','Lt_Vin','Lt_Iin','Lt_Temp','Lt_Pressure'])
-        sizefilesarray=len(files)
-        for filename in files[1:sizefilesarray]:
+        sizefilesarray=len(filesmain)
+        # filename = filesmain[i]
+        # tempcsvarray = pd.read_csv(os.path.join(root, filename))
+        # while '10/24/2013' in str(csvarray['DateTimeUTC'][i]).strip():
+        for i in range(1,sizefilesarray):
+            filename=filesmain[i]
+            filenameaux=filesaux[i]
+            tempcsvarray = pd.read_csv(os.path.join(root, filename))
+            tempcsvarrayAux = pd.read_csv(os.path.join(root, filenameaux))
             print(filename)
-            tempcsvarray = pd.read_csv(os.path.join(root,filename))
-            csvarray = csvarray.append(tempcsvarray)
+            if '10/24/2013' in str(tempcsvarray['DateTimeUTC'][i]).strip():
+                Milli = tempcsvarrayAux['Millisecond'].astype(str).str.zfill(3)
+                tempcsvarray['DateTimeUTC']=tempcsvarray['DateTimeUTC']+'.'
+                tempcsvarray['DateTimeUTC']=tempcsvarray['DateTimeUTC']+ Milli
+                csvarray = csvarray.append(tempcsvarray)
             # csvarray=csvarray.append(tempcsvarray,columns=['DateTime','DateTimeUTC','Millisecond','Master_FrameNumber',
             #     'Master_Time','Master_Vin,Master_Iin','Master_Vchg','Master_Ichg','Master_Vbat','Master_Ibat','Master_Vp1'
             #     ,'Master_Ip1','Master_Vp2','Master_Ip2','Master_V33','Master_Temp','Es_FrameNumber','Es_Time','Es_Vin',
             #     'Es_Iin','Es_Temp','Es_Pressure','Li_FrameNumber','Li_Time','Li_Vin','Li_Iin','Li_Temp','Li_Pressure',
             #     'Lt_FrameNumber','Lt_Time','Lt_Vin','Lt_Iin','Lt_Temp','Lt_Pressure'])
             # Append the new dataset to the preexisting within the directory
-            print("Size of the tempcsvarray: " + str(tempcsvarray.shape))
-            print("Size of the csvarray: " + str(csvarray.shape))
+                print("10/24/2013 data")
+                print("Size of the tempcsvarray: " + str(tempcsvarray.shape))
+                print("Size of the csvarray: " + str(csvarray.shape))
+            else:
+                print("No more 10/24/2013 data")
+                break
+            print("--- %s seconds ---" % (time.time() - start_time))
     # print(type(csvarray)
     # csvarray['UnixTimeStamp'] = csvarray['UnixTimeStamp'].str.replace(':','') #http://stackoverflow.com/questions/14345739/replacing-part-of-string-in-python-pandas-dataframe
     # csvarray['UnixTimeStamp'] = csvarray['UnixTimeStamp'].replace(to_replace=':', value='', regex=True)
