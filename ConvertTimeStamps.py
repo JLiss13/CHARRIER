@@ -7,7 +7,7 @@ day='10/24/2013 '
 dir = "/Users/Jaliss/Documents/NASA/C-HARRIER/C-HARRIER_DATA/OCEANIA_Aircraft_Data_11_05_2013/"
 
 #10 Hz data
-file=os.path.join(dir,"TO_Cabin_Data_11_5_2013/CABIN_10hz_13110505.TXT") # 1 or 10 Hz aircraft data csv file
+file=os.path.join(dir,"TO_Cabin_Data_11_5_2013/CABIN_10hz_13110505.TXT") # 10 Hz aircraft data csv file
 tempcsvarray = pd.read_csv(file)
 print("Size of the tempcsvarray: " + str(tempcsvarray.shape))
 headers=tempcsvarray.dtypes.index
@@ -29,9 +29,9 @@ for i in range(1,tempcsvarray.shape[0]):
 rec_temp_array['DateTimeUTC']=rec_array
 print(rec_temp_array.shape)
 tempcsvarray.insert(1,'DateTimeUTC', rec_temp_array)
-print("Done with 10 Hz data")
+tempcsvarray.columns= pd.Series(tempcsvarray.columns).str.replace('_x','') #Make 1 Hz and 10 Hz match
 tempcsvarray.to_csv(file.replace('.TXT','')+'_'+ "Modified"+".csv", sep=',')
-
+print("Done with 10 Hz data")
 
 #1 Hz data
 file=os.path.join(dir,"TO_Cabin_Data_11_5_2013/CABIN_1hz_v2_13110505.TXT") # 1 or 10 Hz aircraft data csv file
@@ -56,6 +56,7 @@ for i in range(1,tempcsvarray.shape[0]):
 rec_temp_array['DateTimeUTC']=rec_array
 print(rec_temp_array.shape)
 tempcsvarray.insert(1,'DateTimeUTC', rec_temp_array)
+tempcsvarray.columns= pd.Series(tempcsvarray.columns).str.replace('_y','') #Make 1 Hz and 10 Hz match
 tempcsvarray.to_csv(file.replace('.TXT','')+'_'+ "Modified"+".csv", sep=',')
 print("Done with 1 Hz data")
 

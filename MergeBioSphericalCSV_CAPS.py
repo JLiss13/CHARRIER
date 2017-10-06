@@ -13,6 +13,7 @@ os.chdir(dir)
 # datadirectory='today'
 datadirectory=input("What is the data directory where the cabin csv files exist? (i.e. 'today')")
 dayofflight=input("What is the day of the flight? (i.e. '10/24/2013')")
+CAPS_SUFFIX=input("What is the CAPS data type you are merging? (i.e. URC, URE, URU)")
 # dayofflight='09/05/2017'
 
 #datadirectory='CAIR_Data_11_5_2013'
@@ -36,13 +37,14 @@ for folder in folderlist:
         files = filter(lambda k: not 'summary' in k, files)
         files = filter(lambda k: not folder in k,files)
         files = filter(lambda k: not 'Modified' in k, files)
+        files = filter(lambda k: CAPS_SUFFIX in k,files)
     # files = filter(lambda k: k[0:2] == prefix in k, files) # filters out only files with the prefix beginning
         files = filter(lambda k: os.path.getsize(k) > 410, files) # Filter out all files larger than 410 bytes
         os.chdir(root)
         files = list(files)
         print(files)
-        filesmain = filter(lambda k: not 'Aux' in k, files)
-        filesmain = list(filesmain)
+        # filesmain = filter(lambda k: not 'Aux' in k, files)
+        filesmain = list(files)
         # Uncomment 47 to 48 if working with the old data
         # filesaux = filter(lambda k: 'Aux' in k, files)
         # filesaux = list(filesaux)
@@ -95,7 +97,6 @@ for folder in folderlist:
                     else:
                         str_nodata="No more "+ dayofflight + " data"
                         print(str_nodata)
-                        print("File number:" + str(i)+ "," + "Name: " + filename + ".Timestamp needs to be checked")
                         break
                 else:
                     str_empty = "File " + str(os.path.join(root, filename)) + " .csv is empty!!"
@@ -111,10 +112,10 @@ for folder in folderlist:
     # csvarray['UnixTimeStamp'] = csvarray['UnixTimeStamp'].replace(to_replace=':', value='', regex=True)
     # csvarray['DateTime'] = pd.to_datetime(csvarray['DateTime'], unit='s')
     # csvarray.drop(csvarray.columns[0]) #http://stackoverflow.com/questions/13411544/delete-column-from-pandas-dataframe
-    csvarray.to_csv("total_for_"+folder+".csv", sep=',') #http://stackoverflow.com/questions/16923281/pandas-writing-dataframe-to-csv-file
-    print("Printed " + folder+".csv ... ")
-    print("Shape of " + folder+".csv is " + str(csvarray.shape))
-os.chdir(dir)
+    csvarray.to_csv(folder + CAPS_SUFFIX + ".csv", sep=',') #http://stackoverflow.com/questions/16923281/pandas-writing-dataframe-to-csv-file
+    print("Printed " + folder + CAPS_SUFFIX +".csv ... ")
+    print("Shape of " + folder + CAPS_SUFFIX +".csv is " + str(csvarray.shape))
+os.chdir('/Users/Jaliss/Documents/NASA/C-HARRIER/Code/CHARRIER')
 print("--- %s seconds ---" % (time.time() - start_time))
 # Close the Pandas Excel writer and output the Excel file.
 # writer.save()
