@@ -112,7 +112,7 @@ for folder in folderlist:
     # csvarray['DateTime'] = pd.to_datetime(csvarray['DateTime'], unit='s')
     # csvarray.drop(csvarray.columns[0]) #http://stackoverflow.com/questions/13411544/delete-column-from-pandas-dataframe
     csvarray.to_csv("total_for_"+folder+".csv", sep=',') #http://stackoverflow.com/questions/16923281/pandas-writing-dataframe-to-csv-file
-    print("Printed " + folder+".csv ... ")
+    print("Printed total_for_" + folder+".csv ... ")
     print("Shape of " + folder+".csv is " + str(csvarray.shape))
 os.chdir(dir)
 print("--- %s seconds ---" % (time.time() - start_time))
