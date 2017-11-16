@@ -6,7 +6,8 @@ import numpy as np
 
 #Linear interpolation
 start_time = time.time()
-dir="/Users/Jaliss/Documents/NASA/C-HARRIER/C-HARRIER_DATA/OCEANIA_Aircraft_Data_11_05_2013"
+# dir="/Users/Jaliss/Documents/NASA/C-HARRIER/C-HARRIER_DATA/OCEANIA_Aircraft_Data_11_05_2013"
+dir=input("What is the data directory with all the aircraft data?")
 fileaircraft10=os.path.join(dir,"TO_Cabin_Data_11_5_2013/CABIN_10hz_13110505_Modified.csv") # 10 Hz aircraft data csv file
 fileaircraft1=os.path.join(dir,"TO_Cabin_Data_11_5_2013/CABIN_1hz_v2_13110505_Modified.csv") # 10 Hz aircraft data csv file
 fileBSI=os.path.join(dir,"CAIR_Data_11_5_2013/CAIR_Data_11_5_2013.csv") # BSI file data with millisecond resolution
@@ -36,10 +37,19 @@ tempcsvarray10.set_index('DateTimeUTC', inplace=True)
 tempcsvarrayBSI.set_index('DateTimeUTC', inplace=True)
 
 #Convert into ms units
+<<<<<<< HEAD
+tempcsvarray10.index = pd.to_datetime(tempcsvarray10.index, format="%m/%d/%y %H:%M:%S.%f")
+# tempcsvarray1.index = pd.to_datetime(tempcsvarray1.index, format="%m/%d/%Y %H:%M:%S.%f")
+# tempcsvarray1timestamps.index = pd.to_datetime(tempcsvarray1timestamps.index, format="%m/%d/%Y %H:%M:%S.%f")
+
+tempcsvarrayBSI.index = pd.to_datetime(tempcsvarrayBSI.index, format="%m/%d/%y %H:%M:%S.%f")
+
+=======
 tempcsvarray10.index = pd.to_datetime(tempcsvarray10.index, format="%m/%d/%Y %H:%M:%S.%f")
 # tempcsvarray1.index = pd.to_datetime(tempcsvarray1.index, format="%m/%d/%Y %H:%M:%S.%f")
 # tempcsvarray1timestamps.index = pd.to_datetime(tempcsvarray1timestamps.index, format="%m/%d/%Y %H:%M:%S.%f")
 tempcsvarrayBSI.index = pd.to_datetime(tempcsvarrayBSI.index, format="%m/%d/%Y %H:%M:%S.%f")
+>>>>>>> 0498ad40fb06878fdcde4b7e2d9b0656fa4c869f
 
 
 # Merges the union between the two datasets and does not delete any preexisting data from either

@@ -4,14 +4,25 @@
 import os
 import chardet
 import time
+<<<<<<< HEAD
+import pandas as pd
+
+start_time = time.time()
+codedir=os.getcwd() #Grab current code directory and return to after code is run
+=======
 start_time = time.time()
 import pandas as pd
+>>>>>>> 0498ad40fb06878fdcde4b7e2d9b0656fa4c869f
 dir=input("What is the root directory where the cabin csv files exist?")
 # dir="/Users/Jaliss/Documents/NASA/C-HARRIER/C-HARRIER_DATA/OCEANIA_Aircraft_Data_11_05_2013/"
 # dir='/Users/Jaliss/Documents/NASA/C-HARRIER/Deployment_Mission/9-5-17/BSI/C-AERO'
 os.chdir(dir)
 # datadirectory='today'
+<<<<<<< HEAD
+datadirectory=input("What is the data directory where the cabin csv files exist? (i.e. 'today170911')")
+=======
 datadirectory=input("What is the data directory where the cabin csv files exist? (i.e. 'today')")
+>>>>>>> 0498ad40fb06878fdcde4b7e2d9b0656fa4c869f
 dayofflight=input("What is the day of the flight? (i.e. '10/24/2013')")
 CAPS_SUFFIX=input("What is the CAPS data type you are merging? (i.e. URC, URE, URU)")
 # dayofflight='09/05/2017'
@@ -38,6 +49,10 @@ for folder in folderlist:
         files = filter(lambda k: not folder in k,files)
         files = filter(lambda k: not 'Modified' in k, files)
         files = filter(lambda k: CAPS_SUFFIX in k,files)
+<<<<<<< HEAD
+        files = filter(lambda k: not "._" in k,files) # Do not merge hidden files
+=======
+>>>>>>> 0498ad40fb06878fdcde4b7e2d9b0656fa4c869f
     # files = filter(lambda k: k[0:2] == prefix in k, files) # filters out only files with the prefix beginning
         files = filter(lambda k: os.path.getsize(k) > 410, files) # Filter out all files larger than 410 bytes
         os.chdir(root)
@@ -49,7 +64,11 @@ for folder in folderlist:
         # filesaux = filter(lambda k: 'Aux' in k, files)
         # filesaux = list(filesaux)
         #Obtains preexisting excel file or makes a new one using the first one as an example. It also takes notes of UnixTimeStamp column.
+<<<<<<< HEAD
+        with open(os.path.join(root, files[0]), 'rb') as f: #Determine encoding
+=======
         with open(os.path.join(root, files[0]), 'rb') as f:
+>>>>>>> 0498ad40fb06878fdcde4b7e2d9b0656fa4c869f
             result = chardet.detect(f.read())  # or readline if the file is large
         csvarray = pd.read_csv(os.path.join(root, files[0]),encoding=result['encoding'])
         # Uncomment 53 to 58 if using old data
@@ -112,10 +131,17 @@ for folder in folderlist:
     # csvarray['UnixTimeStamp'] = csvarray['UnixTimeStamp'].replace(to_replace=':', value='', regex=True)
     # csvarray['DateTime'] = pd.to_datetime(csvarray['DateTime'], unit='s')
     # csvarray.drop(csvarray.columns[0]) #http://stackoverflow.com/questions/13411544/delete-column-from-pandas-dataframe
+<<<<<<< HEAD
+    csvarray.to_csv("total_for_"+folder + CAPS_SUFFIX + ".csv", sep=',') #http://stackoverflow.com/questions/16923281/pandas-writing-dataframe-to-csv-file
+    print("Printed " + "total_for_"+ folder + CAPS_SUFFIX +".csv ... ")
+    print("Shape of " + "total_for_"+ folder + CAPS_SUFFIX +".csv is " + str(csvarray.shape))
+os.chdir(codedir)
+=======
     csvarray.to_csv(folder + CAPS_SUFFIX + ".csv", sep=',') #http://stackoverflow.com/questions/16923281/pandas-writing-dataframe-to-csv-file
     print("Printed " + folder + CAPS_SUFFIX +".csv ... ")
     print("Shape of " + folder + CAPS_SUFFIX +".csv is " + str(csvarray.shape))
 os.chdir('/Users/Jaliss/Documents/NASA/C-HARRIER/Code/CHARRIER')
+>>>>>>> 0498ad40fb06878fdcde4b7e2d9b0656fa4c869f
 print("--- %s seconds ---" % (time.time() - start_time))
 # Close the Pandas Excel writer and output the Excel file.
 # writer.save()

@@ -6,6 +6,10 @@ import chardet
 import time
 start_time = time.time()
 import pandas as pd
+<<<<<<< HEAD
+codedir=os.getcwd()
+=======
+>>>>>>> 0498ad40fb06878fdcde4b7e2d9b0656fa4c869f
 dir=input("What is the root directory where the cabin csv files exist?")
 # dir="/Users/Jaliss/Documents/NASA/C-HARRIER/C-HARRIER_DATA/OCEANIA_Aircraft_Data_11_05_2013/"
 # dir='/Users/Jaliss/Documents/NASA/C-HARRIER/Deployment_Mission/9-5-17/BSI/C-AERO'
@@ -112,9 +116,15 @@ for folder in folderlist:
     # csvarray['DateTime'] = pd.to_datetime(csvarray['DateTime'], unit='s')
     # csvarray.drop(csvarray.columns[0]) #http://stackoverflow.com/questions/13411544/delete-column-from-pandas-dataframe
     csvarray.to_csv("total_for_"+folder+".csv", sep=',') #http://stackoverflow.com/questions/16923281/pandas-writing-dataframe-to-csv-file
+<<<<<<< HEAD
+    print("Printed " + folder+".csv ... ")
+    print("Shape of " + folder+".csv is " + str(csvarray.shape))
+os.chdir(codedir)
+=======
     print("Printed total_for_" + folder+".csv ... ")
     print("Shape of " + folder+".csv is " + str(csvarray.shape))
 os.chdir(dir)
+>>>>>>> 0498ad40fb06878fdcde4b7e2d9b0656fa4c869f
 print("--- %s seconds ---" % (time.time() - start_time))
 # Close the Pandas Excel writer and output the Excel file.
 # writer.save()
