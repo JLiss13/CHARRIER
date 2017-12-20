@@ -4,7 +4,11 @@ import pandas as pd
 import os
 import chardet
 import time
-
+import csv
+def CSVtoTSV(filename):
+    tsvfile = open(filename.replace('.csv','.tsv'), 'w+')
+    tsvtempfile=csv.writer(tsvfile, delimiter='\t')
+    tsvtempfile.writerows(csv.reader(open(filename)))
 def Convert12hr_to_24hour(dataframe1,headerindex):
     tempvar=pd.to_datetime(dataframe1[headerindex], errors="coerce")
     tempvar=tempvar.dt.strftime('%m/%d/%y %H:%M:%S.%f')
@@ -42,7 +46,13 @@ def ConvertDecimalHours2TimestampwithMilliseconds(dir,filename):
     tempcsvarray.columns= pd.Series(tempcsvarray.columns).str.replace('_x','') #Make 1 Hz and 10 Hz match
     tempcsvarray.to_csv(file.replace('.TXT','')+'_'+ "Modified"+".csv", sep=',')
     print("Done with converting HH.hhhhh to BSI timestamps")
-
+def PrintToCSVReport(ReportFile,Data1,Append_write):
+	# Append_write = 'x' if you want to create and write the file
+    # Append_write = 'w' if you want to write a new file and overwrite the old file
+	# Append_write = 'a' if you want to append to the file
+    ReportFiletemp = open(ReportFile, Append_write)
+    ReportFiletemp.write(Data1 + '\n')
+    ReportFiletemp.close()
 def MergeBSIdataCAPS(dir,dayofflight):
     start_time = time.time()
     codedir=os.getcwd() #Grab current code directory and return to after code is run
@@ -87,6 +97,8 @@ def MergeBSIdataCAPS(dir,dayofflight):
             sizefilesarray=len(filesmain)
             for i in range(1,sizefilesarray):
                 filename=filesmain[i]
+                PrintToCSVReport(str(os.path.join(folder,'ListofEmptyFiles.txt')),'List of Empty Data Files','w') #Make Empty datafile to store names of empty files
+                PrintToCSVReport(str(os.path.join(folder,'ListofCorruptFiles.txt')),'List of Corrupt Data Files (Files without Headers)','w') #Make Empty datafile to store names of corrupt files
                 tempcsvarray = pd.read_csv(os.path.join(root, filename), encoding=result['encoding'])
                 print(filename)
                 if 'DateTimeUTC' in tempcsvarray.columns:
@@ -104,9 +116,11 @@ def MergeBSIdataCAPS(dir,dayofflight):
                             break
                     else:
                         str_empty = "File " + str(os.path.join(root, filename)) + " .csv is empty!!"
+                        PrintToCSVReport(str(os.path.join(folder, 'ListofEmptyFiles.txt')), str(os.path.join(root, filename)),'a') #Append txt to store names of empty files
                         print(str_empty)
                 else:
                     str_check="File " + str(os.path.join(root, filename))+" .csv needs headers to be checked!!"
+                    PrintToCSVReport(str(os.path.join(folder, 'ListofCorruptFiles.txt')), str(os.path.join(root, filename)),'a') #Append txt to store names of corrupt files
                     print(str_check)
                     break
                     break
@@ -160,6 +174,8 @@ def MergeBSIdata(dir,dayofflight):
             sizefilesarray=len(filesmain)
             for i in range(1,sizefilesarray):
                 filename=filesmain[i]
+                PrintToCSVReport(str('ListofEmptyFiles.txt'),'List of Empty Data Files','w')  # Make Empty datafile to store names of empty files
+                PrintToCSVReport(str('ListofCorruptFiles.txt'),'List of Corrupt Data Files (Files without Headers)','w')  # Make Empty datafile to store names of corrupt files
                 tempcsvarray = pd.read_csv(os.path.join(root, filename), encoding=result['encoding'])
                 print(filename)
                 if 'DateTimeUTC' in tempcsvarray.columns:
@@ -178,9 +194,11 @@ def MergeBSIdata(dir,dayofflight):
                             break
                     else:
                         str_empty = "File " + str(os.path.join(root, filename)) + " .csv is empty!!"
+                        PrintToCSVReport('ListofEmptyFiles.txt',str(os.path.join(root, filename)),'a')  # Append txt to store names of empty files
                         print(str_empty)
                 else:
                     str_check="File " + str(os.path.join(root, filename))+" .csv needs headers to be checked!!"
+                    PrintToCSVReport('ListofCorruptFiles.txt', str(os.path.join(root, filename)),'a')  # Append txt to store names of corrupt files
                     print(str_check)
                     break
                     break
